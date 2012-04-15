@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -42,7 +41,7 @@ var pg = require('pg').native;
 //var port = 7391;
 //obj.conn = 'tcp://' + user + '@' + host + ':' + port + '/' + db;
 	
-	var connectionString = 'tcp://mgialane:chan10jr!@db-edlab.cs.umass.edu:7391/mgialane';
+	var connectionString = 'tcp://mgialane:pw@db-edlab.cs.umass.edu:7391/mgialane';
 	//var connectionString = "pg://max:superpostgres390server@madcodemurder.sytes.net:5432/chatdb";
     //var connectionString = "pg://postgres:postgres@localhost:5432/chatdb";
     pg.connect(connectionString, function(err, client) {
