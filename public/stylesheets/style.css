@@ -1,8 +1,29 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+#conversationbox {
+	width:355px;
+	height:500px;
+	border:thin #006 solid;
+}
+
+#usersonline {
+	width:50px;
+	height:50px;
+	border:thin #006 solid;
+}
+
+.color0 {
+	color:#F00;
+	background-color:#F3F4FF;
+	width:100%;
+}
+.color1 {
+	color:#00F;
+	width:100%;
 }

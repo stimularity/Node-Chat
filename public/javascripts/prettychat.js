@@ -18,6 +18,15 @@ $(document).ready(function() {
 	});
 });
 
+
+function addMessage(m){
+	$('#conversationbox').append('<div class="color'+color+'">'+m+'</div>');
+	alternateRow();
+}
+var color = 0;
+function alternateRow(){
+	if(color == 0){ color = 1} else { color = 0; }	
+}
 //Socket.io
 var socket = io.connect('http://localhost');
   socket.on('news', function (data) {
@@ -27,5 +36,5 @@ var socket = io.connect('http://localhost');
   });
   
 socket.on('message', function (data) {
-	alert(data['message']);
+	addMessage(data.message);
 });
