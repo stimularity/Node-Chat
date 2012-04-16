@@ -14,6 +14,7 @@ exports.manage = function(req, res){ //Post to database
     var connectionString = "pg://postgres:postgres@localhost:5432/chatdb";
     pg.connect(connectionString, function(err, client) {
       client.query('INSERT INTO messages VALUES(default, $1, now())',[req.body.data], function(err, result) {
+		  //Return something if message was inserted correctly.
       });
     });
 	
