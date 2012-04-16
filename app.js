@@ -39,9 +39,11 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 //Socket IO ------------
 var io = require('socket.io').listen(app);
-var user = 2342;
+var users = 0;
 
 io.sockets.on('connection', function (socket) { //Get the latest messages from database dump to screen.
+	users++; //Increase number of online users.
+	socket.broadcast.emit('useractivity', {users: users});
 	
 	//Load all previous Messages
     var connectionString = "pg://postgres:postgres@localhost:5432/chatdb";
@@ -49,20 +51,18 @@ io.sockets.on('connection', function (socket) { //Get the latest messages from d
       client.query('SELECT * FROM messages', function(err, result) {
 		  for(var i=0; i<result.rows.length; i++)
 		  {
-			  socket.emit('load', { message: result.rows[i].message, time: result.rows[i].tstamp });  //Load all previous Messages for real
+			  socket.emit('load', { message: result.rows[i].message, time: result.rows[i].tstamp, users: users });  //Load all previous Messages for real
 		  }
       });
     });
-	
-  
   
   socket.on('disconnect', function () { //Signal that user Left.
-	console.log("User Disconnected.");
-    io.sockets.emit('user disconnected');
+	users--; //Remove one user.
+	socket.broadcast.emit('useractivity', {users: users});
   });
   
   socket.on('message', function(data){ //Send Messages to all users.
-	  socket.broadcast.emit('message', {user: user, message: data.message, time:data.time});
+	  socket.broadcast.emit('message', {user: "", message: data.message, time:data.time});
 	});
 	
 });
