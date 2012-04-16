@@ -4,7 +4,8 @@
  */
 
 var express = require('express')
-  , routes = require('./routes');
+  , routes = require('./routes')
+  , pg = require('pg').native;
 
 
 var app = module.exports = express.createServer();
@@ -38,15 +39,22 @@ console.log("Express server listening on port %d in %s mode", app.address().port
 
 //Socket IO ------------
 var io = require('socket.io').listen(app);
-
-app.listen(80);
-
-app.get('/', function (req, res) {
-  res.sendfile(__dirname + '/index.html');
-});
+var user = 2342;
 
 io.sockets.on('connection', function (socket) { //Get the latest messages from database dump to screen.
-  socket.emit('news', { hello: 'world' });
+	
+	//Load all previous Messages
+    var connectionString = "pg://postgres:postgres@localhost:5432/chatdb";
+    pg.connect(connectionString, function(err, client) {
+      client.query('SELECT * FROM messages', function(err, result) {
+		  for(var i=0; i<result.rows.length; i++)
+		  {
+			  socket.emit('load', { message: result.rows[i].message, time: result.rows[i].tstamp });  //Load all previous Messages for real
+		  }
+      });
+    });
+	
+  
   
   socket.on('disconnect', function () { //Signal that user Left.
 	console.log("User Disconnected.");
@@ -54,7 +62,7 @@ io.sockets.on('connection', function (socket) { //Get the latest messages from d
   });
   
   socket.on('message', function(data){ //Send Messages to all users.
-	  socket.broadcast.emit('message', {message: data});
+	  socket.broadcast.emit('message', {user: user, message: data.message, time:data.time});
 	});
 	
 });
@@ -62,7 +70,7 @@ io.sockets.on('connection', function (socket) { //Get the latest messages from d
 
 
 
-/* Database Testing function */
+/* Database Testing function 
 var pg = require('pg').native;
 
     var connectionString = "pg://postgres:postgres@localhost:5432/chatdb";
@@ -75,4 +83,4 @@ var pg = require('pg').native;
 		  }
       });
     });
-	
+*/

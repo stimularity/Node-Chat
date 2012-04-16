@@ -7,9 +7,15 @@ a {
 }
 
 #conversationbox {
-	width:355px;
+	width:100%;
 	height:500px;
 	border:thin #006 solid;
+	overflow:auto;
+	padding:0 0 4px 0;
+}
+#conversationbox div {
+	padding:0px 5px 0px 5px;
+	font-size:14px;
 }
 
 #usersonline {
@@ -18,12 +24,15 @@ a {
 	border:thin #006 solid;
 }
 
+.tstamp{
+	color:#999;
+	float:right;
+}
+
 .color0 {
 	color:#F00;
-	background-color:#F3F4FF;
-	width:100%;
 }
 .color1 {
 	color:#00F;
-	width:100%;
+	background-color:#F3F4FF;
 }
