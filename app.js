@@ -36,6 +36,32 @@ app.post('/manage', routes.manage);
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
 
+//Socket IO ------------
+var io = require('socket.io').listen(app);
+
+app.listen(80);
+
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+io.sockets.on('connection', function (socket) { //Get the latest messages from database dump to screen.
+  socket.emit('news', { hello: 'world' });
+  
+  socket.on('disconnect', function () { //Signal that user Left.
+	console.log("User Disconnected.");
+    io.sockets.emit('user disconnected');
+  });
+  
+  socket.on('message', function(data){ //Send Messages to all users.
+	  socket.broadcast.emit('message', {message: data});
+	});
+	
+});
+//Socket IO ------------
+
+
+
 /* Database Testing function */
 var pg = require('pg').native;
 
