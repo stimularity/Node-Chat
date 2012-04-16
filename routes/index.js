@@ -1,4 +1,4 @@
-
+var pg = require('pg').native;
 /*
  * GET home page.
  */
@@ -9,4 +9,12 @@ exports.index = function(req, res){
 
 exports.manage = function(req, res){ //Post to database
 	console.log('Message: ' + req.body.data);
-};
+	//Sanatize imput for the love of god.
+
+    var connectionString = "pg://postgres:postgres@localhost:5432/chatdb";
+    pg.connect(connectionString, function(err, client) {
+      client.query('INSERT INTO messages VALUES(default, $1, now())',[req.body.data], function(err, result) {
+      });
+    });
+	
+};//
